@@ -5,9 +5,8 @@ OIGED_FAIL = "oiged.txt"
 VALED_FAIL = "valed.txt"
 KOIK_FAIL = "koik.txt"
 
-# Küsime M ja N kasutajalt, mitte fikseeritud
-# M = 3
-# N = 3
+M = 3
+N = 3
 
 
 def loe_kusimused():
@@ -16,7 +15,7 @@ def loe_kusimused():
         for rida in f:
             rida = rida.strip()
             if ":" in rida:
-                k, v = rida.split(":", 1)  # Lisage ", 1" et mitte jagada mitmes koolonis
+                k, v = rida.split(":", 1)
                 kus_vas[k] = v
     return kus_vas
 
@@ -32,12 +31,10 @@ def genereeri_email(nimi):
 def alusta_kusimustik():
     kus_vas = loe_kusimused()
     
-    # Kui vähe küsimusi
     if len(kus_vas) < 3:
         print("Liiga vähe küsimusi! Lisa enne rohkem.")
         return
     
-    # Küsi M ja N (nagu ülesandes)
     try:
         M = int(input("Mitu inimest testime (M)? "))
         N = int(input("Mitu küsimust igale inimesele (N)? "))
@@ -59,7 +56,6 @@ def alusta_kusimustik():
             print("See inimene on juba testitud!")
             continue
 
-        # Genereeri email automaatselt (nagu ülesandes)
         email = genereeri_email(nimi)
         print(f"Email: {email}")
         
@@ -75,7 +71,6 @@ def alusta_kusimustik():
 
         vastajad.append([nimi, oiged, email])
 
-        # "E-kiri" vastajale
         print(f"\nSaadetud: {email}")
         print(f"Tere {nimi}!")
         print(f"Sinu õigete vastuste arv: {oiged}.")
@@ -150,3 +145,4 @@ def lisa_kusimus():
         f.write(f"\n{k}:{v}")
 
     print("Küsimus lisatud!")
+
