@@ -1,0 +1,120 @@
+from functions import *
+
+if __name__ == "__main__":
+    while True:
+        print("\nMenüü")
+        print("Sisesta number")
+        print("1. Teksti sisestus ja .txt-faili genereerimine")
+        print("2. Kalkulaator")
+        print("3. Ruut")
+        print("0. Välju")
+
+        try:
+            choice = int(input("Valik: "))
+        except ValueError:
+            print("Vale valik!")
+            continue
+
+        if choice == 1:
+            txt_fail()
+        elif choice == 2:
+            kalkulaator()
+        elif choice == 3:
+            ruut()
+        elif choice == 0:
+            print("Programmi lõpetamine...")
+            break
+        else:
+            print("Vale valik!")
+
+———
+
+import math
+
+def txt_fail():
+    tekst = input("Sisesta tekst: ")
+    file_path = "Fail.txt"
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(tekst)
+    print("Fail loodud:", file_path)
+
+
+def kalkulaator():
+    print("\nVali tehe")
+    print("1. Liitmine")
+    print("2. Lahutamine")
+    print("3. Korrutamine")
+    print("4. Jagamine")
+    print("5. Ruutvõrrand")   # теперь есть опция квадратного уравнения
+
+    valik = input("Valik: ")
+
+    if valik == "1":
+        liitmine()
+    elif valik == "2":
+        lahutamine()
+    elif valik == "3":
+        korrutamine()
+    elif valik == "4":
+        jagamine()
+    elif valik == "5":
+        ruutvorrand()   # вызов новой функции
+    else:
+        print("Vale valik!")
+
+
+def liitmine():
+    a = float(input("a = "))
+    b = float(input("b = "))
+    print("Tulemus:", a + b)
+
+
+def lahutamine():
+    a = float(input("a = "))
+    b = float(input("b = "))
+    print("Tulemus:", a - b)
+
+
+def korrutamine():
+    a = float(input("a = "))
+    b = float(input("b = "))
+    print("Tulemus:", a * b)
+
+
+def jagamine():
+    a = float(input("a = "))
+    b = float(input("b = "))
+    if b == 0:
+        print("Nulliga ei saa jagada!")
+    else:
+        print("Tulemus:", a / b)
+
+import math
+
+def ruutvorrand():
+    print("Ruutvõrrand kujul ax^2 + bx + c = 0")
+    
+    a = float(input("Sisesta a: "))
+    b = float(input("Sisesta b: "))
+    c = float(input("Sisesta c: "))
+
+    if a == 0:
+        print("See ei ole ruutvõrrand.")
+        return
+
+    D = b**2 - 4*a*c
+
+    if D < 0:
+        print("Reaalarvulisi lahendeid pole.")
+    elif D == 0:
+        x = -b / (2*a)
+        print("Üks lahend:", x)
+    else:
+        x1 = (-b + math.sqrt(D)) / (2*a)
+        x2 = (-b - math.sqrt(D)) / (2*a)
+        print("Lahendid:", x1, "ja", x2)
+
+def ruut():
+    a = int(input("Sisesta ruudu külje pikkus: "))
+    for _ in range(a):
+        print("* " * a)
