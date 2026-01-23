@@ -1,0 +1,28 @@
+import math
+
+def ruutvorrand():
+    print("Ruutvõrrand: ax^2 + bx + c = 0")
+    
+    a = float(input("Sisesta a: "))
+    b = float(input("Sisesta b: "))
+    c = float(input("Sisesta c: "))
+
+    if a == 0:
+        print("See ei ole ruutvõrrand.")
+        return
+
+    # Считаем дискриминант сразу с квадратным корнем
+    d = b*b - 4*a*c
+
+    if d < 0:
+        print("Reaalarvulisi lahendeid pole.")
+        return
+
+    # Используем список для решений
+    lahendid = [(-b + math.sqrt(d)) / (2*a), (-b - math.sqrt(d)) / (2*a)]
+    
+    # Если дискриминант 0, оставляем только один корень
+    if d == 0:
+        lahendid = [lahendid[0]]
+
+    print("Lahendid:", *lahendid)
