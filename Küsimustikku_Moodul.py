@@ -1,148 +1,183 @@
 import random
 
-KUSIMUSED_FAIL = "kusimused_vastused.txt"
-OIGED_FAIL = "oiged.txt"
-VALED_FAIL = "valed.txt"
-KOIK_FAIL = "koik.txt"
+fail1 = "kysimused.txt"
+fail2 = "oiged.txt" 
+fail3 = "valed.txt"
+fail4 = "koik.txt"
 
-M = 3
-N = 3
-
-
-def loe_kusimused():
-    kus_vas = {}
-    with open(KUSIMUSED_FAIL, "r", encoding="utf-8") as f:
-        for rida in f:
-            rida = rida.strip()
-            if ":" in rida:
-                k, v = rida.split(":", 1)
-                kus_vas[k] = v
-    return kus_vas
-
-
-def genereeri_email(nimi):
-    osad = nimi.split()
-    if len(osad) >= 2:
-        return f"{osad[0].lower()}.{osad[-1].lower()}@example.com"
-    else:
-        return f"{nimi.lower()}@example.com"
-
-
-def alusta_kusimustik():
-    kus_vas = loe_kusimused()
+def loe():
+    k = []
+    v = []
     
-    if len(kus_vas) < 3:
-        print("Liiga vähe küsimusi! Lisa enne rohkem.")
+    try:
+        f = open(fail1, "r")
+        for rida in f:
+            if ":" in rida:
+                a = rida.split(":")
+                k.append(a[0].strip())
+                v.append(a[1].strip())
+        f.close()
+    except:
+        f = open(fail1, "w")
+        f.write("Mis on Python?:programmeerimiskeel\n")
+        f.write("Mis värvi on lumi?:valge\n")
+        f.close()
+        k = ["Mis on Python?", "Mis värvi on lumi?"]
+        v = ["programmeerimiskeel", "valge"]
+    
+    return k, v
+
+def email(nimi):
+    a = nimi.split()
+    if len(a) > 1:
+        return a[0].lower() + "." + a[1].lower() + "@example.com"
+    else:
+        return nimi.lower() + "@example.com"
+
+def alusta():
+    k, v = loe()
+    
+    if len(k) < 2:
+        print("Vaja rohkem küsimusi")
         return
     
     try:
-        M = int(input("Mitu inimest testime (M)? "))
-        N = int(input("Mitu küsimust igale inimesele (N)? "))
-        
-        if N > len(kus_vas):
-            print(f"Viga! Failis on ainult {len(kus_vas)} küsimust.")
-            return
+        mitu_inimest = int(input("Mitu inimest? "))
+        mitu_kysimust = int(input("Mitu küsimust? "))
     except:
-        print("Viga! Sisesta arvud.")
+        print("Viga")
         return
     
-    vastajad = []
-    juba_testitud = []
-
-    for i in range(M):
-        nimi = input(f"\nVastaja {i+1}/{M} nimi: ")
-
-        if nimi in juba_testitud:
-            print("See inimene on juba testitud!")
-            continue
-
-        email = genereeri_email(nimi)
-        print(f"Email: {email}")
-        
-        juba_testitud.append(nimi)
-
-        kysimused = random.sample(list(kus_vas.keys()), N)
-        oiged = 0
-
-        for k in kysimused:
-            vastus = input(f"{nimi}, {k} ")
-            if vastus.lower() == kus_vas[k].lower():
-                oiged += 1
-
-        vastajad.append([nimi, oiged, email])
-
-        print(f"\nSaadetud: {email}")
-        print(f"Tere {nimi}!")
-        print(f"Sinu õigete vastuste arv: {oiged}.")
-
-        if oiged > N / 2:
-            print("Sa sooritasid testi edukalt.")
-        else:
-            print("Kahjuks testi ei sooritatud edukalt.")
-
-    if vastajad:  # Kui on vähemalt üks vastaja
-        salvesta_failidesse(vastajad, N)
-        saada_raport(vastajad, N)
-    else:
-        print("\nEi testitud ühtegi inimest.")
-
-
-def salvesta_failidesse(vastajad, N):
-    oiged = []
-    valed = []
-
-    for v in vastajad:
-        if v[1] > N / 2:
-            oiged.append(v)
-        else:
-            valed.append(v)
-
-    oiged.sort(key=lambda x: x[1], reverse=True)
-    valed.sort(key=lambda x: x[0])
-
-    with open(OIGED_FAIL, "w", encoding="utf-8") as f:
-        for v in oiged:
-            f.write(f"{v[0]} – {v[1]} õigesti\n")
-
-    with open(VALED_FAIL, "w", encoding="utf-8") as f:
-        for v in valed:
-            f.write(f"{v[0]} – {v[1]} õigesti\n")  # Lisa ka punktid
-
-    with open(KOIK_FAIL, "w", encoding="utf-8") as f:
-        for v in vastajad:
-            f.write(f"{v[0]}, {v[1]}, {v[2]}\n")
-
-    print("\nEdukalt vastanud:")
-    for v in oiged:
-        print(f"{v[0]} - {v[1]} õigesti")
-
-    print("\nTulemused saadetud e-posti aadressidele.")
-
-
-def saada_raport(vastajad, N):
-    print("\nSaadetud: tootaja@firma.ee")
-    print("\nTänased küsimustiku tulemused:\n")
-
-    if vastajad:
-        parim = max(vastajad, key=lambda x: x[1])
-
-        nr = 1
-        for v in vastajad:
-            tulemus = "SOBIS" if v[1] > N / 2 else "EI SOBINUD"
-            print(f"{nr}. {v[0]} – {v[1]} õigesti – {v[2]} – {tulemus}")
-            nr += 1
-
-        print(f"\nParim vastaja: {parim[0]} ({parim[1]} õigesti)")
+    tulemused = []
     
-    print("\nLugupidamisega,\nKüsimustiku Automaatprogramm")
+    for x in range(mitu_inimest):
+        print("\nInimene", x+1)
+        nimi = input("Nimi: ")
+        if nimi == "":
+            continue
+        
+        em = email(nimi)
+        print("Email:", em)
+        
+        olemas = False
+        try:
+            f = open(fail4, "r")
+            for rida in f:
+                if nimi in rida:
+                    olemas = True
+            f.close()
+        except:
+            pass
+        
+        if olemas:
+            print("Juba oli")
+            continue
+        
+        oige = 0
+        for y in range(mitu_kysimust):
+            nr = random.randint(0, len(k)-1)
+            print("Küsimus:", k[nr])
+            vastus = input("Vastus: ").lower()
+            
+            if vastus == v[nr].lower():
+                print("Õige")
+                oige += 1
+            else:
+                print("Vale. Õige on:", v[nr])
+        
+        print(nimi, "sai", oige, "/", mitu_kysimust)
+        
+        if oige > mitu_kysimust / 2:
+            print("Läbis")
+            eduka = True
+        else:
+            print("Ei läbinud")
+            eduka = False
+        
+        print("Email:", em)
+        print("Tere", nimi)
+        print("Sul on", oige, "õiget")
+        if eduka:
+            print("Oled edukas")
+        else:
+            print("Ei ole edukas")
+        
+        tulemused.append([nimi, oige, em, eduka])
+    
+    if tulemused:
+        salvesta(tulemused)
+        nayta(tulemused)
 
+def salvesta(t):
+    o = []
+    for x in t:
+        if x[3]:
+            o.append([x[0], x[1]])
+    
+    for i in range(len(o)):
+        for j in range(i+1, len(o)):
+            if o[i][1] < o[j][1]:
+                o[i], o[j] = o[j], o[i]
+    
+    f = open(fail2, "w")
+    for x in o:
+        f.write(x[0] + " - " + str(x[1]) + " õigesti\n")
+    f.close()
+    
+    v = []
+    for x in t:
+        if not x[3]:
+            v.append([x[0], x[1]])
+    
+    for i in range(len(v)):
+        for j in range(i+1, len(v)):
+            if v[i][0] > v[j][0]:
+                v[i], v[j] = v[j], v[i]
+    
+    f = open(fail3, "w")
+    for x in v:
+        f.write(x[0] + " - " + str(x[1]) + " õigesti\n")
+    f.close()
+    
+    f = open(fail4, "a")
+    for x in t:
+        f.write(x[0] + "," + str(x[1]) + "," + x[2] + "\n")
+    f.close()
+    
+    print("Salvestatud")
 
-def lisa_kusimus():
-    k = input("Sisesta uus küsimus: ")
-    v = input("Sisesta õige vastus: ")
+def nayta(t):
+    print("\nEdukad:")
+    for x in t:
+        if x[3]:
+            print(x[0], x[1], "õigesti")
+    
+    print("\nAruanne:")
+    print("tootaja@firma.ee")
+    
+    for i in range(len(t)):
+        x = t[i]
+        if x[3]:
+            s = "SOBIS"
+        else:
+            s = "EI SOBINUD"
+        print(i+1, ".", x[0], "-", x[1], "-", x[2], "-", s)
+    
+    if t:
+        parim = t[0]
+        for x in t:
+            if x[1] > parim[1]:
+                parim = x
+        print("Parim:", parim[0], "(", parim[1], ")")
+    
+    print("Emailid saadetud")
 
-    with open(KUSIMUSED_FAIL, "a", encoding="utf-8") as f:
-        f.write(f"\n{k}:{v}")
-
-    print("Küsimus lisatud!")
-
+def lisa():
+    k = input("Küsimus: ")
+    v = input("Vastus: ")
+    
+    f = open(fail1, "a")
+    f.write("\n" + k + ":" + v)
+    f.close()
+    
+    print("Lisatud")
