@@ -1,18 +1,18 @@
-import Küsimustikku_Moodul as km
+import Küsimustikku_Moodul
 
 while True:
-    print("\n1. Alusta küsimustikku")
-    print("2. Lisa uus küsimus")
+    print("\n1. Test")
+    print("2. Lisa küsimus")
     print("3. Välju")
-
-    valik = input("Vali: ")
-
-    if valik == "1":
-        km.alusta_kusimustik()
-    elif valik == "2":
-        km.lisa_kusimus()
-    elif valik == "3":
-        print("Programm lõpetatud.")
+    
+    v = input("Valik: ")
+    
+    if v == "1":
+        Küsimustikku_Moodul.alusta()
+    elif v == "2":
+        Küsimustikku_Moodul.lisa()
+    elif v == "3":
+        print("Head aega")
         break
     else:
-        print("Vale valik!")
+        print("Vale")
